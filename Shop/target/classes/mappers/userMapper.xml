@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 다른 mapper와 중복되지 않도록 네임스페이스 기재 -->
+<mapper namespace="user">
+	<insert id="insertUser">
+		insert into shop_users
+		values(#{userid}, #{passwd}, #{name}, #{email}, #{phone}, 1 , #{authority})
+	</insert>
+	
+	<select id="selectUser" resultType="java.util.Map">
+		select 
+			userid as username,
+			passwd as password,
+			name,
+			email,
+			phone,
+			enabled,
+			authority
+		from shop_users
+		where userid=#{userid}
+	</select>
+	
+	<update id="updateUser">
+		update shop_users
+			passwd,
+			email,
+			phone
+		where userid=#{userid}
+	</update>
+	
+	<!-- 아이디 찾기 -->
+	<select id="searchId" resultType="String">
+		select userid
+		from shop_users
+		where name= #{name} and
+			  email = #{email}
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
