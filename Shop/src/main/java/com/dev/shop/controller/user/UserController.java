@@ -12,9 +12,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.dev.shop.model.user.dao.UserDAO;
+import com.dev.shop.model.user.dto.UserVO;
 import com.dev.shop.service.user.UserService;
 
 @Controller
@@ -62,23 +64,24 @@ public class UserController {
 		return "user/login.page";
 	}
 
-	// 아이디 찾기 페이지
-	@RequestMapping("findId.do")
-	public String findId() {
-		return "user/findId.page";
-	}
-
 	// 아이디 찾는 로직
 	@RequestMapping("searchId.do")
-	public String searchId(String name, String email) {
-		String id;
-		Map<String, String> map = new HashMap<>();
-		map.put(name, name);
-		map.put(email, email);
-		id = userDao.searchId(map);
-
-		return "1";
+	@ResponseBody
+	public String searchId(String email) {
+		String userid = userService.searchId(email);
+		
+		if(userid==null)
+			return "error";
+		
+		return userid;
 	}
+	
+	@RequestMapping(value="searchPw.do", method = RequestMethod.POST)
+	public void searchPw(UserVO vo) {
+		System.out.println(vo);
+		userService.searchPw(vo);		
+	}
+	
 
 	// 마이 페이지로 이동
 	@Secured("ROLE_USER")

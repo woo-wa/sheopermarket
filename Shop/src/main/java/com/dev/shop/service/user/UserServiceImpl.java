@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.dev.shop.model.user.dao.UserDAO;
 import com.dev.shop.model.user.dto.UserDTO;
+import com.dev.shop.model.user.dto.UserVO;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -34,6 +35,22 @@ public class UserServiceImpl implements UserService {
 	public void delete(String userid) throws Exception {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public String searchId(String email) {
+		
+		return Userdao.searchId(email);
+	}
+
+	@Override
+	public String searchPw(UserVO vo) {
+		String userid = Userdao.searchPw(vo);
+		if(userid == null)
+			return "error";
+		
+		
+		return userid;
 	}
 
 	

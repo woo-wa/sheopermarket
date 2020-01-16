@@ -8,10 +8,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-
 	<div class="site-wrap">
-
-
 		<div class="bg-light py-3">
 			<div class="container">
 				<div class="row">
@@ -42,8 +39,8 @@
 
 							<div class="row mb-5">
 								<input style="width: 35%;" type="password" class="form-control"
-									id="passwd" name="passwd" placeholder="비밀번호 확인"> <input
-									type="submit" style="width: 10%; margin-left: 10px;"
+									id="passwd" name="passwd" placeholder="비밀번호 확인"> 
+								<input	type="submit" style="width: 10%; margin-left: 10px;"
 									class="btn btn-primary btn-lg btn-block" value="확인">
 							</div>
 						</form>

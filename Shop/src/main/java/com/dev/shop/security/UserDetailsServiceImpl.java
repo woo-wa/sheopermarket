@@ -27,9 +27,9 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 		
 		if (userVo != null) {
 			su.setName(userVo.getName());         
-			su.setUsername(userVo.getId());     // principal
+			su.setUsername(userVo.getUserid());     // principal
 			su.setPassword(userVo.getPasswd());  // credetial
-			su.setAuthorities(Arrays.asList(new SimpleGrantedAuthority(userVo.getRole())));
+			su.setAuthorities(Arrays.asList(new SimpleGrantedAuthority(userVo.getAuthority())));
 		}
 		
 		return su;

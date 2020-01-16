@@ -30,9 +30,15 @@ public class UserDAOImpl implements UserDAO {
 	}
 	
 	@Override
-	public String searchId(Map<String, String> map) {
-		
-		return sqlSession.selectOne("user.searchId", map);
+	public String searchId(String email) {
+		System.out.println("Mybatis 호출------------------");
+		return sqlSession.selectOne("user.searchId", email);
+	}
+	
+	@Override
+	public String searchPw(UserVO vo) {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne("user.searchPw", vo);
 	}
 
 	@Override
@@ -46,5 +52,7 @@ public class UserDAOImpl implements UserDAO {
 		// TODO Auto-generated method stub
 		
 	}
+
+	
 
 }

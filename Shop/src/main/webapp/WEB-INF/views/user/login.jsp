@@ -6,7 +6,7 @@
 <%@ taglib prefix="sec"	uri="http://www.springframework.org/security/tags"%>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<%@ include file = "modal.jsp" %>
 </head>
 <sec:csrfMetaTags />
 <script> 
@@ -35,7 +35,7 @@
                     location.href='${pageContext.request.contextPath}/'; 
                 }, error : function(jqXHR, status, e) {
                     console.error(status + " : " + e);
-                    alert("아이디와 비밀번호가 일치하지 않습니다.");
+                    alert("로그인 정보가 일치하지 않습니다.");
                     $('#passwd').val("");
                 }
 
@@ -45,7 +45,6 @@
 
 </script>
 <body>
-
 	<div class="site-wrap">
 		<div class="bg-light py-3">
 			<div class="container">
@@ -96,10 +95,9 @@
 									<div class="col-md-12">
 
 										<div style="text-align: right;">
-											<a href="${path}/shop/user/joinUser.do"
-												style="padding: 10px;">회원가입</a> <a href="#"
-												style="padding: 10px;">아이디 찾기</a> <a href="#"
-												style="padding: 10px;">비밀번호 찾기</a>
+											<a href="${path}/shop/user/joinUser.do" style="padding: 10px;">회원가입</a> 
+												<a data-toggle="modal" href="#myModal"	style="padding: 10px;">아이디 찾기</a>
+												 <a data-toggle="modal" href="#search_pw" style="padding: 10px;">비밀번호 찾기</a>
 										</div>
 									</div>
 								</div>

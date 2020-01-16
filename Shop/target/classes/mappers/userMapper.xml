@@ -5,6 +5,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <!-- 다른 mapper와 중복되지 않도록 네임스페이스 기재 -->
 <mapper namespace="user">
+	<!-- 회원 가입 -->
 	<insert id="insertUser">
 		insert into shop_users
 		values(#{userid}, #{passwd}, #{name}, #{email}, #{phone}, 1 , #{authority})
@@ -35,8 +36,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="searchId" resultType="String">
 		select userid
 		from shop_users
-		where name= #{name} and
-			  email = #{email}
+		where email = #{email}
+	</select>
+	
+	<select id="searchPw" resultType="String">
+		select userid
+		from shop_users
+		where userid = #{userid}
+		  and email = #{email}
 	</select>
 </mapper>
 
