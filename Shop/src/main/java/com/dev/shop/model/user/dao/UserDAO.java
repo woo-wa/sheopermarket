@@ -18,4 +18,6 @@ public interface UserDAO {
 	public void updateUser(UserDTO dto) throws Exception;
 	//회원 탈퇴
 	public void deleteUser(String userid) throws Exception;
+	//비밀번호 변경
+	public void changePw(UserVO vo);
 }

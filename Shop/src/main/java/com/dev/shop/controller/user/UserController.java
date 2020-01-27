@@ -77,9 +77,12 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="searchPw.do", method = RequestMethod.POST)
-	public void searchPw(UserVO vo) {
+	@ResponseBody
+	public String searchPw(UserVO vo) {
 		System.out.println(vo);
-		userService.searchPw(vo);		
+		String id = userService.searchPw(vo);
+		
+		return id;
 	}
 	
 
@@ -120,5 +123,14 @@ public class UserController {
 
 		return "user/modify.page";
 	}
-
+	
+	@RequestMapping(value="changePw.do", method = RequestMethod.GET)
+	public String changePw() {
+		return "user/changePw.page";
+	}
+	
+	@RequestMapping(value="changePw.do", method= RequestMethod.POST)
+	public void changePW() {
+		
+	}
 }

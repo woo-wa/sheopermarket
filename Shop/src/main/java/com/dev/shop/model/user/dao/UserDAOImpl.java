@@ -53,6 +53,12 @@ public class UserDAOImpl implements UserDAO {
 		
 	}
 
+	@Override
+	public void changePw(UserVO vo) {
+		sqlSession.update("user.changePw", vo);
+		
+	}
+
 	
 
 }

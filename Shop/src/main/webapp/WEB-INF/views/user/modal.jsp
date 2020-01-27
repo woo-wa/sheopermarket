@@ -16,7 +16,7 @@ $(function(){
     $('#search_id_form').submit(function(event){
         event.preventDefault();
         var params = "email=" + $('#email').val()
-
+		
         $.ajax({
             url : "${pageContext.request.contextPath}/user/searchId.do",
             type : "post",
@@ -27,34 +27,60 @@ $(function(){
                 $('#search_id .modal-body').html("<h2>"+response+"<h2>")
                 $('#myModal').modal('hide')
                 $('#search_id').modal('show')
+                $('#email').val("")
             }, error : function(jqXHR, status, e) {
                 alert("에러"+response)
             }
-
+            
         });	 
     });
 	//비밀번호 찾기
 	$('#search_pw_form').submit(function(event){
         event.preventDefault();
         var params ="userid="+$('#p_userid').val() + "&email=" + $('#p_email').val()
-
         $.ajax({
             url : "${pageContext.request.contextPath}/user/searchPw.do",
             type : "post",
             dataType : "HTML",
             data : params,
             success : function(response) {
-                alert("아이디 : "+response)
-                $('#search_id .modal-body').html("<h2>"+response+"<h2>")
-                $('#myModal').modal('hide')
-                $('#search_id').modal('show')
+                if(response == '')
+                	alert("정보 불일치")
+                else{
+                	$('#search_pw').modal('hide')
+                    $('#tempPw').modal('show')
+                    
+                	$('#p_userid').val("")
+            		$('#p_email').val("")
+
+                    sendEmail(params)
+                }
             }, error : function(jqXHR, status, e) {
                 alert("에러"+response)
             }
 
         });	 
     });
+	
+	function sendEmail(params){
+		$.ajax({
+	        url : "${pageContext.request.contextPath}/email/sendEmail.do",
+	        type : "post",
+	        dataType : "HTML",
+	        data : params,
+	        success : function(response) {
+	            if(response == '')
+	            	alert("정보 불일치")
+	            else
+	            	alert("아이디 : "+response)
+	        }, error : function(jqXHR, status, e) {
+	            alert("에러"+response)
+	        }
+
+	    });	
+	}
 });
+
 </script>
 </head>
 <body>
@@ -116,6 +142,21 @@ $(function(){
 							class="btn btn-primary btn-lg btn-block" value="찾기">
 				  		</div>
 				  	</form>
+        		</div>
+      		</div>
+    	</div>
+	</div>
+	<!-- 임시 비밀번호 발급 -->
+	<div class="modal modal-center fade" id="tempPw" role="dialog">
+		<div class="modal-dialog">
+    
+			<div class="modal-content">
+        		<div class="modal-header">
+        			<h2>아이디 찾기</h2>
+          			<button type="button" class="close" data-dismiss="modal">×</button>
+        		</div>
+        		<div class="modal-body">
+        		<h2>임시 비밀번호가 발급 되었습니다.</h2>
         		</div>
       		</div>
     	</div>

@@ -3,9 +3,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+<%@ taglib prefix="sec"	uri="http://www.springframework.org/security/tags"%>
 <meta charset="UTF-8">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/table.css">
 <title>Insert title here</title>
 </head>
 <body>
@@ -20,67 +19,35 @@
 				</div>
 			</div>
 		</div>
+
 		<div class="site-section">
 			<div class="container">
 
 				<div class="row mb-5">
 					<div class="col-md-9 order-2">
-
-						<div class="row">
-							<div class="col-md-12 mb-5" style=margin-bottom:0!important;>
-								<div class="float-md-left mb-4">
-									<h2 class="text-black h5">주문/배송 조회</h2>
+						<form action="${pageContext.request.contextPath}/user/modify.do"	method="post">
+							<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}"/>
+							<sec:authentication property="principal.username" var="user_id" />
+							<input type="hidden" id="userid" name="userid" value="${user_id}"/>
+							<div class="row">
+								<div class="col-md-12 mb-5" style="margin-bottom: 0 !important">
+									<div class="float-md-left mb-4">
+										<h2 class="text-black h5">비밀번호 확인</h2>
+									</div>
 								</div>
 							</div>
-						</div>
 
-						<div class="row mb-5">
-
-							<table class="table-fill">
-								<thead>
-									<tr>
-										<th class="text-left">주문 번호</th>
-										<th class="text-left">총결제금액</th>
-										<th class="text-left">상품정보</th>
-										<th class="text-left">배송현황</th>
-
-									</tr>
-								</thead>
-								<tbody class="table-hover">
-									<tr>
-										<td class="text-left">0001</td>
-										<td class="text-left">$ 50,000.00</td>
-										<td class="text-left">나이키 무슨무슨 신발</td>
-										<td class="text-left">결제완료</td>
-									</tr>
-									<tr>
-										<td class="text-left">0001</td>
-										<td class="text-left">$ 50,000.00</td>
-										<td class="text-left">나이키 무슨무슨 신발</td>
-										<td class="text-left">결제완료</td>
-									</tr>
-									<tr>
-										<td class="text-left">0001</td>
-										<td class="text-left">$ 50,000.00</td>
-										<td class="text-left">나이키 무슨무슨 신발</td>
-										<td class="text-left">결제완료</td>
-									</tr>
-									<tr>
-										<td class="text-left">0001</td>
-										<td class="text-left">$ 50,000.00</td>
-										<td class="text-left">나이키 무슨무슨 신발</td>
-										<td class="text-left">결제완료</td>
-									</tr>
-									<tr>
-										<td class="text-left">0001</td>
-										<td class="text-left">$ 50,000.00</td>
-										<td class="text-left">나이키 무슨무슨 신발</td>
-										<td class="text-left">결제완료</td>
-									</tr>
-								</tbody>
-							</table>
-
-						</div>
+							<div class="row mb-5">
+								<input  type="password" class="form-control"
+									id="passwd" name="passwd" placeholder="기존 비밀번호"> 
+								<input  type="password" class="form-control"
+									id="passwd" name="passwd" placeholder="신규 비밀번호"> 
+								<input  type="password" class="form-control"
+									id="passwd" name="passwd" placeholder="비밀번호 확인">
+								<input	type="submit" 
+									class="btn btn-primary btn-lg btn-block" value="확인">
+							</div>
+						</form>
 					</div>
 
 					<div class="col-md-3 order-1 mb-5 mb-md-0">
@@ -116,14 +83,13 @@
 
 							<div class="mb-4">
 								<h3 class="mb-3 h6 text-uppercase text-black d-block">회원정보</h3>
-								<a href="${path}/shop/user/modify.do"
-								class="d-flex color-item align-items-center"> <span
+								<a href="#" class="d-flex color-item align-items-center"> <span
 									class="bg-danger color d-inline-block rounded-circle mr-2"></span>
 									<span class="text-black">개인정보 수정</span>
 								</a> <a href="#" class="d-flex color-item align-items-center"> <span
 									class="bg-success color d-inline-block rounded-circle mr-2"></span>
 									<span class="text-black">배송지 관리</span>
-								</a> <a href="${path}/shop/user/changePw.do" class="d-flex color-item align-items-center"> <span
+								</a> <a href="#" class="d-flex color-item align-items-center"> <span
 									class="bg-info color d-inline-block rounded-circle mr-2"></span>
 									<span class="text-black">비밀번호 변경 </span>
 								</a> <a href="#" class="d-flex color-item align-items-center"> <span

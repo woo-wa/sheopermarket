@@ -46,11 +46,16 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public String searchPw(UserVO vo) {
 		String userid = Userdao.searchPw(vo);
-		if(userid == null)
-			return "error";
-		
-		
 		return userid;
+	}
+
+	@Override
+	public void changePw(String userid, String passwd) {
+		UserVO vo = null;
+		vo.setUserid(userid);
+		vo.setPasswd(passwd);
+		Userdao.changePw(vo);
+		
 	}
 
 	

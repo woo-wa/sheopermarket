@@ -38,13 +38,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		from shop_users
 		where email = #{email}
 	</select>
-	
+	<!-- 비밀번호 찾기 -->
 	<select id="searchPw" resultType="String">
 		select userid
 		from shop_users
 		where userid = #{userid}
 		  and email = #{email}
 	</select>
+	
+	<update id="changePw">
+		update shop_users set
+			passwd = #{passwd}
+			where userid = #{userid}
+			
+	</update>
 </mapper>
 
 
