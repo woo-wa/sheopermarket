@@ -20,20 +20,20 @@ public class UserServiceImpl implements UserService {
 	BCryptPasswordEncoder passwordEncoder;
 	
 	@Override
-	public Map<String, Object> checkPw (String userid, String passwd) {
+	public UserVO selectUser(String userid) {
 		
-		return null;
+		return Userdao.selectUser(userid);
 	}
 	
 	@Transactional
 	@Override
-	public void update(UserDTO dto) throws Exception {
-		Userdao.updateUser(dto);
+	public void update(UserVO vo) throws Exception {
+		Userdao.updateUser(vo);
 	}
 
 	@Override
 	public void delete(String userid) throws Exception {
-		// TODO Auto-generated method stub
+		Userdao.deleteUser(userid);
 
 	}
 
@@ -51,12 +51,14 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void changePw(String userid, String passwd) {
-		UserVO vo = null;
+		UserVO vo = new UserVO();
 		vo.setUserid(userid);
 		vo.setPasswd(passwd);
 		Userdao.changePw(vo);
 		
 	}
+
+	
 
 	
 

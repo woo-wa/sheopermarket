@@ -120,14 +120,14 @@
 								class="d-flex color-item align-items-center"> <span
 									class="bg-danger color d-inline-block rounded-circle mr-2"></span>
 									<span class="text-black">개인정보 수정</span>
-								</a> <a href="#" class="d-flex color-item align-items-center"> <span
+								</a> <a href="${path}/shop/post/post.do" class="d-flex color-item align-items-center"> <span
 									class="bg-success color d-inline-block rounded-circle mr-2"></span>
 									<span class="text-black">배송지 관리</span>
 								</a> <a href="${path}/shop/user/changePw.do" class="d-flex color-item align-items-center"> <span
 									class="bg-info color d-inline-block rounded-circle mr-2"></span>
 									<span class="text-black">비밀번호 변경 </span>
-								</a> <a href="#" class="d-flex color-item align-items-center"> <span
-									class="bg-primary color d-inline-block rounded-circle mr-2"></span>
+								</a> <a href="${path}/shop/user/deleteUser.do" class="d-flex color-item align-items-center"> 
+								<span class="bg-primary color d-inline-block rounded-circle mr-2"></span>
 									<span class="text-black">회원탈퇴</span>
 								</a>
 							</div>

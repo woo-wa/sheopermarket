@@ -39,7 +39,7 @@
 		<session-management invalid-session-url ="/user/login.do">
 			<!-- max-sessuon="1" 동시 접속 막기 / expired-url 다중접속 시 세션 만료 후 이동 할 페이지 -->
 			<concurrency-control max-sessions="1"
-				expired-url="/user/login.do" />
+				expired-url="/" />
 			<!-- error-if-maximum-exceeded="true" -->
 		</session-management>
 		<access-denied-handler ref="userDeniedHandler" />
@@ -58,13 +58,14 @@
 			<beans:property name="errormsg" value="ERRORMSG"/>
 			<beans:property name="defaultFailureUrl" value="/user/login.do?result=fail"/>
 	</beans:bean>
+	
 	<!-- 로그인 인증을 처리하는 빈 -->
 	<beans:bean id="userService"
 		class="com.dev.shop.service.UserAuthenticationService">
-		<beans:constructor-arg name="sqlSession"
+		 <beans:constructor-arg name="sqlSession"
 			ref="sqlSession" />
 	</beans:bean>
-
+	
 	<!-- 비밀번호 암호화를 위한 빈 -->
 	<beans:bean id="bcryptPasswordEncoder"
 		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />

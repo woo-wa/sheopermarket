@@ -40,11 +40,11 @@ public class UserLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandl
 
         String accept = request.getHeader("accept");
 
-        UserDTO securityUser = null;
+        SecurityUser securityUser = null;
         if (SecurityContextHolder.getContext().getAuthentication() != null) {
             Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             if (principal != null && principal instanceof UserDetails) {
-                securityUser = (UserDTO) principal;
+                securityUser = (SecurityUser) principal;
             }
         }
         HttpSession session = request.getSession();

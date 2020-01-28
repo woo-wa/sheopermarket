@@ -5,8 +5,11 @@ import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -63,7 +66,25 @@ public class UserController {
 		userDao.insertUser(map);
 		return "user/login.page";
 	}
-
+	//회원 탈퇴 페이지
+	@RequestMapping(value="deleteUser.do", method = RequestMethod.GET)
+	public String deleteUser() {
+		return "user/delete.page";
+	}
+	//회원 탈퇴 로직
+	@RequestMapping(value="deleteUser.do", method = RequestMethod.POST)
+	public String deleteUser(String passwd ,Authentication authentication, HttpSession session) {
+		UserDetails user = (UserDetails) authentication.getPrincipal();
+		boolean check = passwordEncoder.matches(passwd, user.getPassword());
+		System.out.println("비번 : " + passwd);
+		if(check) {
+			session.invalidate();
+			return "redirect:/";
+		}else {
+			return "user/alert";
+		}
+		
+	}
 	// 아이디 찾는 로직
 	@RequestMapping("searchId.do")
 	@ResponseBody
@@ -75,7 +96,7 @@ public class UserController {
 		
 		return userid;
 	}
-	
+	//비밀번호 찾기 로직
 	@RequestMapping(value="searchPw.do", method = RequestMethod.POST)
 	@ResponseBody
 	public String searchPw(UserVO vo) {
@@ -93,44 +114,63 @@ public class UserController {
 		return "user/mypage.page";
 	}
 
-	// 회원 정보 수정
+	// 회원 정보 수정 전 암호 확인 페이지
 	@Secured("ROLE_USER")
 	@RequestMapping(value = "modify.do", method = RequestMethod.GET)
 	public String checkPW() throws Exception {
 
 		return "user/checkPw.page";
 	}
-	
+	// 회원 정보 수정 페이지 이동
 	@Secured("ROLE_USER")
 	@RequestMapping(value="modify.do", method = RequestMethod.POST)
-	public ModelAndView modify (@RequestParam String userid, @RequestParam String passwd) {
+	public ModelAndView modify (@RequestParam String userid, @RequestParam String passwd, Authentication authentication) {
+		UserDetails user = (UserDetails) authentication.getPrincipal();
+		UserVO userVo = userService.selectUser(userid);
 		ModelAndView mv = new ModelAndView();
-		Map<String, Object> user; 
-		user = userService.checkPw(userid, passwd);
-
-		boolean check =	passwordEncoder.matches(passwd, (String)user.get("PASSWORD"));
+		mv.setViewName("user/alert");
+		boolean check =	passwordEncoder.matches(passwd, user.getPassword());
 		if(check) {
-			mv.addObject("map",user);
+			mv.addObject("user",userVo);
 			mv.setViewName("user/modify.page");
 			return mv;
 		}
 		return mv;
 	}
 	
+	// 회원 정보 수정 로직
 	@Secured("ROLE_USER")
-	@RequestMapping("update.do")
-	public String UpdateUser() throws Exception {
-
-		return "user/modify.page";
+	@RequestMapping(value="updateUser.do", method = RequestMethod.POST)
+	public String UpdateUser(UserVO vo) throws Exception {
+		userService.update(vo);
+		return "redirect:user/mypage.do";
 	}
 	
+	// 비밀번호 변경 페이지
+	@Secured("ROLE_USER")
 	@RequestMapping(value="changePw.do", method = RequestMethod.GET)
 	public String changePw() {
 		return "user/changePw.page";
 	}
 	
+	//비밀번호 변경 로직
+	@Secured("ROLE_USER")
 	@RequestMapping(value="changePw.do", method= RequestMethod.POST)
-	public void changePW() {
-		
+	@ResponseBody
+	public String changePW(@RequestParam String oldpasswd, @RequestParam String newpasswd,
+			Authentication authentication) {
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		boolean check = passwordEncoder.matches(oldpasswd, userDetails.getPassword());
+		if(check) {
+			if(oldpasswd.equals(newpasswd)) {		//비밀번호가 전과 같음
+				return "same";		
+			}else {				//비밀번호 변경 성공
+				String encryptPassword = passwordEncoder.encode(newpasswd);
+				userService.changePw(userDetails.getUsername(),encryptPassword);
+				return "suc";	
+			}
+		}else {		//비밀번호 틀림
+			return "wrong";			
+		}
 	}
 }

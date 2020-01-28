@@ -30,7 +30,7 @@
 					<div class="col-md-9 order-2">
 						<form
 							style="width:80%;"
-							action="${pageContext.request.contextPath}/user/insertUser.do"
+							action="${pageContext.request.contextPath}/user/updateUser.do"
 							method="post">
 							<input type="hidden" name="${_csrf.parameterName}"
 								value="${_csrf.token}"> <input type="hidden"
@@ -40,16 +40,16 @@
 									<div class="col-md-12">
 										<label for="userid" class="text-black">아이디<span
 											class="text-danger">*</span></label> <input type="text"
-											class="form-control" id="userid" name="userid" placeholder=""
-											required>
+											class="form-control" id="userid" name="userid" value="${user.userid }"
+											readonly="readonly">
 									</div>
 								</div>
 								<div class="form-group row">
 									<div class="col-md-12">
 										<label for="name" class="text-black">이름 <span
 											class="text-danger">*</span></label> <input type="text"
-											class="form-control" id="name" name="name" placeholder=""
-											required>
+											class="form-control" id="name" name="name" value="${user.name }"
+											readonly="readonly">
 									</div>
 								</div>
 								
@@ -57,7 +57,7 @@
 									<div class="col-md-12">
 										<label for="email" class="text-black">이메일 <span
 											class="text-danger">*</span></label> <input type="email"
-											class="form-control" id="email" name="email" placeholder=""
+											class="form-control" id="email" name="email" value="${user.email }"
 											required>
 									</div>
 								</div>
@@ -66,6 +66,7 @@
 										<label for="c_subject" class="text-black">휴대폰<span
 											class="text-danger">*</span>
 										</label> <input type="text" class="form-control" id="phone"
+											value="${user.phone }"
 											name="phone" placeholder="'-'를 제외한 번호를 입력해 주세요." required>
 									</div>
 								</div>

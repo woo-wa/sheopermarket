@@ -32,7 +32,7 @@ public class EmailController {
 		uuid = uuid.substring(0, 10); // uuid를 앞에서부터 10자리 잘라줌.
 		System.out.println("임시 비밀번호 : " + uuid);
 		String passwd = passwordEncoder.encode(uuid);
-		//userService.changePw(userid, passwd);
+		userService.changePw(userid, passwd);
 		
 		msg += "<div align='center' style='border:1px solid black; font-family:verdana'>";
 		msg += "<h3 style='color: blue;'>";

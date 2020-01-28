@@ -3,56 +3,57 @@
 <!DOCTYPE html>
 <html>
 <head>
-<%@ taglib prefix="sec"	uri="http://www.springframework.org/security/tags"%>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-<sec:csrfMetaTags />
+<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 <script>
-var csrfParameter = $('meta[name="_csrf_parameter"]').attr('content')
-var csrfHeader = $('meta[name="_csrf_header"]').attr('content')
-var csrfToken = $('meta[name="_csrf"]').attr('content')  
+	function showPostcode() {
+		new daum.Postcode(
+				{
+					oncomplete : function(data) {
+						// 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
 
+						// 각 주소의 노출 규칙에 따라 주소를 조합한다.
+						// 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로,
+						// 이를 참고하여 분기한다.
 
-$(function(){
-	$.ajaxSetup({
-		beforeSend: function(xhr) {
-			xhr.setRequestHeader(csrfHeader, csrfToken);
-		}  
-	})
-	$('#change_pw_form').submit(function(event){
-	    event.preventDefault();
-	   
-		if($('#newpasswd').val() == $('#newpasswd_ck').val()){
-			ajax()		
-	    }else{
-	    	alert("비밀번호가 일치하지 않습니다.");
-	    }
-	});
-	
-	function ajax(){
-		var params = "oldpasswd=" + $('#oldpasswd').val() + "&newpasswd=" + $('#newpasswd').val()
+						var fullAddr = '';
+						var extraAddr = '';
 
-    	$.ajax({
-	        url : "${pageContext.request.contextPath}/user/changePw.do",
-	        type : "post",
-	        dataType : "HTML",
-	        data : params,
-	        success : function(res) {
-	        	if(res == 'same'){
-	        		alert("비밀번호가 기존과 동일합니다.")
-	        	}else if(res == 'wrong'){
-	        		alert("기존 비밀번호가 틀립니다. 다시 입력해 주세요.")
-	        	}else if(res == 'suc'){
-	        		alert("비밀번호 변경에 성공하였습니다.")
-	        		location.href='${pageContext.request.contextPath}/user/mypage.do'
-	        	}
-	        }, error : function(jqXHR, status, e) {
-	            alert("에러 : "+e + "status:" + status)
-	        }
-	        
-	    });	
+						if (data.userSelectedType == 'R') {
+							fullAddr = data.roadAddress;
+						} else {
+							fulladdr = data.jibunAddress;
+						}
+
+						// 사용자가 선택한 주소가 도로명 타입일때 조합한다.
+
+						if (data.userSelectedType === 'R') {
+							// 법정동명이 있을 경우 추가한다. (법정리는 제외)
+							// 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+							if (data.bname !== '') {
+								extraAddr += data.bname;
+							}
+							// 건물명이 있고, 공동주택일 경우 추가한다.
+							if (data.buildingName !== ''
+									&& data.apartment === 'Y') {
+								extraAddr += (extraAddr !== '' ? ', '
+										+ data.buildingName : data.buildingName);
+							}
+							// 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+							fullAddr += (extraAddr !== '' ? '(' + extraAddr
+									+ ')' : '');
+						}
+
+						// 우편번호와 주소 정보를 해당 필드에 넣는다.
+						document.getElementById('post_code').value = data.zonecode;
+						document.getElementById("address1").value = fullAddr;
+						// 커서를 상세주소 필드로 이동한다.
+						document.getElementById("address2").focus();
+					}
+				}).open();
 	}
-});
 </script>
 </head>
 <body>
@@ -73,26 +74,37 @@ $(function(){
 
 				<div class="row mb-5">
 					<div class="col-md-9 order-2">
-						<form id="change_pw_form">
+						<form >
+							<input type="hidden" name="${_csrf.parameterName}"
+								value="${_csrf.token}" />
 							<sec:authentication property="principal.username" var="user_id" />
-							<input type="hidden" id="userid" name="userid" value="${user_id}"/>
-							<div class="row">
-								<div class="col-md-12 mb-5" style="margin-bottom: 0 !important">
-									<div class="float-md-left mb-4">
-										<h2 class="text-black h5">비밀번호 변경</h2>
-									</div>
-								</div>
-							</div>
+							<input type="hidden" id="userid" name="userid" value="${user_id}" />
 
-							<div class="row mb-5">
-								<input  type="password" class="form-control"
-									id="oldpasswd" name="passwd" placeholder="기존 비밀번호"> 
-								<input  type="password" class="form-control"
-									id="newpasswd" name="passwd" placeholder="신규 비밀번호"> 
-								<input  type="password" class="form-control"
-									id="newpasswd_ck" name="passwd" placeholder="비밀번호 확인">
-								<input	type="submit" 
-									class="btn btn-primary btn-lg btn-block" value="비밀번호 변경">
+							<div class="row mb-10">
+								<div class="col-md-10 ">
+									<div class="p-4 border mb-3">
+										<span class="d-block text-primary h6 text-uppercase">우승완</span>
+										<p class="mb-0">203 Fake St. Mountain View, San Francisco,
+											California, USA</p>
+									</div>
+									<div class="p-4 border mb-3">
+										<span class="d-block text-primary h6 text-uppercase">구글
+											로그인</span>
+										<p class="mb-0">203 Fake St. Mountain View, San Francisco,
+											California, USA</p>
+									</div>
+									<div class="p-4 border mb-3">
+										<span class="d-block text-primary h6 text-uppercase">페이스북
+											로그인</span>
+										<p class="mb-0">203 Fake St. Mountain View, San Francisco,
+											California, USA</p>
+									</div>
+									
+									<input type="button" class="btn btn-primary btn-lg btn-block"
+											value="추가">
+									
+								</div>
+
 							</div>
 						</form>
 					</div>

@@ -19,10 +19,11 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 	private UserDAO userDao;
 	
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		
-		UserVO userVo = userDao.selectUser(username);
-		
+	public UserDetails loadUserByUsername(String userid) throws UsernameNotFoundException {
+		System.out.println("으아아악:"+userid);
+		UserVO userVo = new UserVO();
+		userVo=userDao.selectUser(userid);
+		System.out.println("loadUserByUsername : " + userVo.toString());
 		SecurityUser su = new SecurityUser();
 		
 		if (userVo != null) {

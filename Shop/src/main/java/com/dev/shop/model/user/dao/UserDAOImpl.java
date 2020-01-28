@@ -24,8 +24,7 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public UserVO selectUser(String userid) {
-		// TODO Auto-generated method stub
-
+		System.out.println("Mybatis 호출------------------");
 		return sqlSession.selectOne("user.selectUser", userid);
 	}
 	
@@ -42,14 +41,14 @@ public class UserDAOImpl implements UserDAO {
 	}
 
 	@Override
-	public void updateUser(UserDTO dto) throws Exception {
-		sqlSession.update("user.updateUser", dto);
+	public void updateUser(UserVO vo) throws Exception {
+		sqlSession.update("user.updateUser", vo);
 		
 	}
 
 	@Override
 	public void deleteUser(String userid) throws Exception {
-		// TODO Auto-generated method stub
+		sqlSession.delete("user.deleteUser", userid);
 		
 	}
 

@@ -13,7 +13,8 @@ public class UserDTO extends User {
 	
 	public UserDTO(String username, String password, boolean enabled, boolean accountNonExpired,
 			boolean credentialsNonExpired, boolean accountNonLocked,
-			Collection<? extends GrantedAuthority> authorities, String userid, String email, String phone) {
+			Collection<? extends GrantedAuthority> authorities, String userid, String email, String phone) 
+	{
 		super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
 		this.userid = userid;
 		this.email = email;

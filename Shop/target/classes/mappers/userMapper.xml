@@ -11,10 +11,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		values(#{userid}, #{passwd}, #{name}, #{email}, #{phone}, 1 , #{authority})
 	</insert>
 	
-	<select id="selectUser" resultType="java.util.Map">
+	<delete id="deleteUser">
+		delete from shop_user
+		where userid = #{userid}
+	</delete>
+	
+	<select id="selectUser" resultType="UserVO">
 		select 
-			userid as username,
-			passwd as password,
+			userid,
+			passwd,
 			name,
 			email,
 			phone,
@@ -25,10 +30,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<update id="updateUser">
-		update shop_users
-			passwd,
-			email,
-			phone
+		update shop_users set
+			email = #{email},
+			phone = #{phone}
 		where userid=#{userid}
 	</update>
 	
