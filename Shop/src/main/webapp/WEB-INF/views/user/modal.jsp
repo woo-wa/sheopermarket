@@ -125,7 +125,6 @@ $(function(){
 	<!-- PW 찾기 창 -->
 	<div class="modal modal-center fade" id="search_pw" role="dialog">
 		<div class="modal-dialog">
-    
 			<div class="modal-content">
         		<div class="modal-header">
         			<h2>비밀번호 찾기</h2>

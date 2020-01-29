@@ -3,6 +3,86 @@
 <!DOCTYPE html>
 <html>
 <head>
+<style>
+
+	#findAddr{
+		cursor:pointer;
+		margin:10px 0 0 10px;
+		border: 1px solid #ced4da;
+		border-radius: 0.25rem;
+		border-color:#7971ea;
+		background-color:#7971ea;
+		color:#fff;
+		background-clip:padding-box;
+		font-size:17px;
+		font-weight:300;
+	}
+.tasks-list-item {
+  display: block;
+  line-height: 24px;
+  padding: 12px 15px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.tasks-list-item + .tasks-list-item {
+  border-top: 1px solid #f0f2f3;
+}
+
+.tasks-list-cb {
+  display: none;
+}
+
+.tasks-list-mark {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  margin-right: 12px;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #c4cbd2;
+  border-radius: 12px;
+}
+
+.tasks-list-mark:before {
+  content: '';
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -5px 0 0 -6px;
+  height: 8px;
+  width: 16px;
+  border: solid #7971ea;
+  border-width: 0 0 4px 4px;
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+
+.tasks-list-cb:checked ~ .tasks-list-mark {
+  border-color: #7971ea;
+}
+
+.tasks-list-cb:checked ~ .tasks-list-mark:before {
+  display: block;
+}
+
+.tasks-list-desc {
+  font-weight: bold;
+  color: #8a9a9b;
+}
+
+.tasks-list-cb:checked ~ .tasks-list-desc {
+  color: #7971ea;
+  
+}
+</style>
 <%@ taglib prefix="sec"
 	uri="http://www.springframework.org/security/tags"%>
 <meta charset="UTF-8">
@@ -47,16 +127,54 @@
 						}
 
 						// 우편번호와 주소 정보를 해당 필드에 넣는다.
-						document.getElementById('post_code').value = data.zonecode;
-						document.getElementById("address1").value = fullAddr;
+						document.getElementById('code').value = data.zonecode;
+						document.getElementById("addr1").value = fullAddr;
 						// 커서를 상세주소 필드로 이동한다.
-						document.getElementById("address2").focus();
+						document.getElementById("addr2").focus();
 					}
 				}).open();
 	}
+	
 </script>
 </head>
 <body>
+<div class="modal modal-center fade" id="add_address" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+        		<div class="modal-header">
+        			<h2>배송지 추가</h2>
+          			<button type="button" class="close" data-dismiss="modal">×</button>
+        		</div>
+        		<div class="modal-body">
+        			<form id="search_pw_form" action="${pageContext.request.contextPath}/user/searchPw.do" method="post">
+          				<div class="row mb-5">
+          					<input type="text" class="form-control" id="recipient" name="recipient" style="margin: 10px;"
+          					placeholder="받는 사람" required>
+          					<input type="text" class="form-control" id="code" name="code" 
+          					style="margin: 10px 0 0 10px; width:110px;" placeholder="우편번호" required>
+          					<input type="button" id="findAddr"value="우편번호 찾기" onclick="showPostcode()">
+          					<input type="text" class="form-control" id="addr1" name="addr1" style="margin: 10px; margin-bottom:5px;"
+          					placeholder="주소" required>
+          					<input type="text" class="form-control" id="addr2" name="addr2" style="margin: 10px; margin-top:5px;"
+          					placeholder="상세 주소" required>
+          					<input type="text" class="form-control" id="phone" name="phone" style="margin: 10px;"
+          					placeholder="휴대폰 번호" required>
+          					<input type="text" class="form-control" id="memo" name="memo" style="margin: 10px;"
+          					placeholder="배송 요청 사항" required>
+          					<label class="tasks-list-item">
+        						<input type="checkbox" name="task_1" value="1" class="tasks-list-cb">
+        						<span class="tasks-list-mark"></span>
+        						<span class="tasks-list-desc">기본 배송지로 설정</span>
+							</label>
+							<input	type="submit" style="margin: 10px;"
+							class="btn btn-primary btn-lg btn-block" value="추가 하기">
+				  		</div>
+				  	</form>
+        		</div>
+      		</div>
+    	</div>
+	</div>
+	
 	<div class="site-wrap">
 		<div class="bg-light py-3">
 			<div class="container">
@@ -101,7 +219,7 @@
 									</div>
 									
 									<input type="button" class="btn btn-primary btn-lg btn-block"
-											value="추가">
+											data-toggle="modal" data-target="#add_address"	value="추가">
 									
 								</div>
 

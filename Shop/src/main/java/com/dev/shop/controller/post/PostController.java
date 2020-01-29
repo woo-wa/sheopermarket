@@ -12,4 +12,10 @@ public class PostController {
 	public String post() {
 		return "post/post.page";
 	}
+	
+	@RequestMapping(value="insertAddress.do", method = RequestMethod.POST)
+	public String insertAddress() {
+		
+		return "";
+	}
 }

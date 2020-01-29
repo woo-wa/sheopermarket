@@ -63,8 +63,8 @@
 					<div class="col-md-12">
 						<h2 class="h3 mb-3 text-black">Login</h2>
 					</div>
+					
 					<div class="col-md-7">
-
 						<form id="login-form"
 							action="${pageContext.request.contextPath}/user/login_check.do"
 							method="post">
