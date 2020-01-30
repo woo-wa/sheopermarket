@@ -1,7 +1,5 @@
 package com.dev.shop.service.user;
 
-import java.util.Map;
-
 import javax.inject.Inject;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -9,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.dev.shop.model.user.dao.UserDAO;
-import com.dev.shop.model.user.dto.UserDTO;
 import com.dev.shop.model.user.dto.UserVO;
 
 @Service

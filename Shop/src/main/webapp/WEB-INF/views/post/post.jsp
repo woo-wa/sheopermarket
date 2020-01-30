@@ -5,18 +5,29 @@
 <head>
 <style>
 
-	#findAddr{
-		cursor:pointer;
-		margin:10px 0 0 10px;
-		border: 1px solid #ced4da;
-		border-radius: 0.25rem;
-		border-color:#7971ea;
-		background-color:#7971ea;
-		color:#fff;
-		background-clip:padding-box;
-		font-size:17px;
-		font-weight:300;
-	}
+#findAddr{
+	cursor:pointer;
+	margin:10px 0 0 10px;
+	border: 1px solid #ced4da;
+	border-radius: 0.25rem;
+	border-color:#7971ea;
+	background-color:#7971ea;
+	color:#fff;
+	background-clip:padding-box;
+	font-size:17px;
+	font-weight:300;
+}
+.modifyAddr{
+	cursor:pointer;
+	border: 1px solid #ced4da;
+	border-radius: 0.25rem;
+	border-color:#7971ea;
+	background-color:#fff;
+	color:#7971ea;
+	background-clip:padding-box;
+	font-size:15px;
+	font-weight:300;
+}
 .tasks-list-item {
   display: block;
   line-height: 24px;
@@ -87,6 +98,7 @@
 	uri="http://www.springframework.org/security/tags"%>
 <meta charset="UTF-8">
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+<sec:csrfMetaTags />
 <script>
 	function showPostcode() {
 		new daum.Postcode(
@@ -134,46 +146,134 @@
 					}
 				}).open();
 	}
-	
+
+    var csrfParameter = $('meta[name="_csrf_parameter"]').attr('content')
+    var csrfHeader = $('meta[name="_csrf_header"]').attr('content')
+    var csrfToken = $('meta[name="_csrf"]').attr('content')  
+	var addr = new Array();
+    $(function(){
+    	
+    	AddrList()
+
+        $('#insertAddress_form').submit(function(event){
+            event.preventDefault();
+            var params = $('#insertAddress_form').serialize()
+
+            $.ajaxSetup({
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader(csrfHeader, csrfToken);
+                }  
+            })
+
+            $.ajax({
+                url : "${pageContext.request.contextPath}/post/insertAddress.do",
+                type : "post",
+                dataType : "json",
+                data : params,
+                success : function(response) {
+                    console.log(response);
+                }, error : function(jqXHR, status, e) {
+                    console.error(status + " : " + e);
+                }
+
+            });	 
+        });
+    });
+    
+	function AddrList(){
+		$.ajax({
+            url : "${pageContext.request.contextPath}/post/listAddress.do",
+            type : "get",
+            dataType : "json",
+            success : function(res) {
+                console.log(res);
+                addr = res;
+                var htmls="";
+                for(i=0; i<res.length; i++){
+                	htmls += '<div class="p-4 border mb-3">';
+                	htmls += '<span class="d-block text-primary h6 text-uppercase">' + res[i].recipient + '</span>';
+                	htmls += '<p class="mb-0">' + res[i].addr1 
+                	if(res[i].addr2 == null){
+                		htmls += '</p>'	
+                	}else{
+                		htmls += res[i].addr2 + '</p>';
+                	}                	
+                	htmls += '<p class="mb-0">' + res[i].phone + '</p>';
+                	if(res[i].memo != null){
+                		htmls += '<p class="mb-0">' + res[i].memo + '</p>';
+                	}
+                	if(res[i].def==1){
+                		htmls += '<p class="mb-0">기본 배송지</p>';
+                	}
+                	htmls += '<input type="button" class="modifyAddr" onclick="modifyAddr('+i+')" value="수정"/>';
+                	htmls += '</div>';
+
+                }
+                htmls += '<input type="button" class="btn btn-primary btn-lg btn-block"' 
+                htmls += 'data-toggle="modal" data-target="#add_address" value="+ 배송지 추가">'
+                $("#addrList").html(htmls);
+            }, error : function(jqXHR, status, e) {
+                console.error(status + " : " + e);
+            }
+
+        });	
+	}
+	function modifyAddr(i){
+		$('.modal-header').html('<h2>배송지 정보 수정</h2> <button type="button" class="close" data-dismiss="modal">×</button>');
+		console.log(addr[i].def);
+		document.getElementById('recipient').value = addr[i].recipient;
+    	document.getElementById('code').value = addr[i].code;
+    	document.getElementById('addr1').value = addr[i].addr1;
+    	document.getElementById('phone').value = addr[i].phone;
+		if(addr[i].def == '1'){
+			$("input:checkbox[id='def']").attr("checked", true);
+
+		}
+    	$('#add_address').modal('show')
+		
+		
+	}
 </script>
 </head>
 <body>
 <div class="modal modal-center fade" id="add_address" role="dialog">
-		<div class="modal-dialog">
-			<div class="modal-content">
-        		<div class="modal-header">
-        			<h2>배송지 추가</h2>
-          			<button type="button" class="close" data-dismiss="modal">×</button>
-        		</div>
-        		<div class="modal-body">
-        			<form id="search_pw_form" action="${pageContext.request.contextPath}/user/searchPw.do" method="post">
-          				<div class="row mb-5">
-          					<input type="text" class="form-control" id="recipient" name="recipient" style="margin: 10px;"
-          					placeholder="받는 사람" required>
-          					<input type="text" class="form-control" id="code" name="code" 
-          					style="margin: 10px 0 0 10px; width:110px;" placeholder="우편번호" required>
-          					<input type="button" id="findAddr"value="우편번호 찾기" onclick="showPostcode()">
-          					<input type="text" class="form-control" id="addr1" name="addr1" style="margin: 10px; margin-bottom:5px;"
-          					placeholder="주소" required>
-          					<input type="text" class="form-control" id="addr2" name="addr2" style="margin: 10px; margin-top:5px;"
-          					placeholder="상세 주소" required>
-          					<input type="text" class="form-control" id="phone" name="phone" style="margin: 10px;"
-          					placeholder="휴대폰 번호" required>
-          					<input type="text" class="form-control" id="memo" name="memo" style="margin: 10px;"
-          					placeholder="배송 요청 사항" required>
-          					<label class="tasks-list-item">
-        						<input type="checkbox" name="task_1" value="1" class="tasks-list-cb">
-        						<span class="tasks-list-mark"></span>
-        						<span class="tasks-list-desc">기본 배송지로 설정</span>
-							</label>
-							<input	type="submit" style="margin: 10px;"
-							class="btn btn-primary btn-lg btn-block" value="추가 하기">
-				  		</div>
-				  	</form>
-        		</div>
-      		</div>
-    	</div>
+	<div class="modal-dialog">
+		<div class="modal-content">
+       		<div class="modal-header">
+       			<h2>배송지 추가</h2>
+         			<button type="button" class="close" data-dismiss="modal">×</button>
+       		</div>
+       		<div class="modal-body">
+       			<form id="insertAddress_form">
+       				<sec:authentication property="principal.username" var="userid" />
+					<input type="hidden" id="userid" name="userid" value="${userid }" >
+       				<div class="row mb-5">
+					<input type="text" class="form-control" id="recipient" name="recipient" style="margin: 10px;"
+					placeholder="받는 사람" required>
+					<input type="text" class="form-control" id="code" name="code" 
+					style="margin: 10px 0 0 10px; width:110px;" placeholder="우편번호" required>
+					<input type="button" id="findAddr"value="우편번호 찾기" onclick="showPostcode()">
+					<input type="text" class="form-control" id="addr1" name="addr1" style="margin: 10px; margin-bottom:5px;"
+					placeholder="주소" required>
+					<input type="text" class="form-control" id="addr2" name="addr2" style="margin: 10px; margin-top:5px;"
+					placeholder="상세 주소">
+					<input type="text" class="form-control" id="phone" name="phone" style="margin: 10px;"
+					placeholder="휴대폰 번호" maxlength="11" required>
+					<input type="text" class="form-control" id="memo" name="memo" style="margin: 10px;"
+					placeholder="배송 요청 사항" >
+					<label class="tasks-list-item">
+						<input type="checkbox" id="def" name="def" value="1" class="tasks-list-cb">
+						<span class="tasks-list-mark"></span>
+						<span class="tasks-list-desc">기본 배송지로 설정</span>
+						</label>
+						<input	type="submit" style="margin: 10px;"
+						class="btn btn-primary btn-lg btn-block" value="추가 하기">
+			  		</div>
+			  	</form>
+		</div>
+		</div>
 	</div>
+</div>
 	
 	<div class="site-wrap">
 		<div class="bg-light py-3">
@@ -192,18 +292,14 @@
 
 				<div class="row mb-5">
 					<div class="col-md-9 order-2">
-						<form >
-							<input type="hidden" name="${_csrf.parameterName}"
-								value="${_csrf.token}" />
-							<sec:authentication property="principal.username" var="user_id" />
-							<input type="hidden" id="userid" name="userid" value="${user_id}" />
-
+					
 							<div class="row mb-10">
-								<div class="col-md-10 ">
+								<div id="addrList" class="col-md-10 ">
 									<div class="p-4 border mb-3">
-										<span class="d-block text-primary h6 text-uppercase">우승완</span>
-										<p class="mb-0">203 Fake St. Mountain View, San Francisco,
-											California, USA</p>
+										<span class="d-block text-primary h6 text-uppercase">일류류류</span>
+										<p class="mb-0">203 Fake St. Mountain View, San Francisco, California, USA</p>
+										<p class="mb-0">203 Fake St. Mountain View, San Francisco, California, USA</p>
+										<p class="mb-0">203 Fake St. Mountain View, San Francisco, California, USA</p>
 									</div>
 									<div class="p-4 border mb-3">
 										<span class="d-block text-primary h6 text-uppercase">구글
@@ -218,15 +314,12 @@
 											California, USA</p>
 									</div>
 									
-									<input type="button" class="btn btn-primary btn-lg btn-block"
-											data-toggle="modal" data-target="#add_address"	value="추가">
-									
-								</div>
-
+								<input type="button" class="btn btn-primary btn-lg btn-block"
+										data-toggle="modal" data-target="#add_address"	value="추가">
 							</div>
-						</form>
+						</div>
 					</div>
-
+					<!-- ---------------------------------------------------------------- -->
 					<div class="col-md-3 order-1 mb-5 mb-md-0">
 
 						<div class="border p-4 rounded mb-4">

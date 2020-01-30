@@ -1,29 +1,29 @@
-package com.dev.shop.model.address.dao;
+package com.dev.shop.service.address;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.ibatis.session.SqlSession;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
+import com.dev.shop.model.address.dao.AddressDAO;
 import com.dev.shop.model.address.vo.AddressVO;
 
-@Repository
-public class AddressDAOImpl implements AddressDAO {
-	
-	@Inject
-	SqlSession sqlSession;
+@Service
+public class AddressServiceImpl implements AddressService {
 
+	@Inject
+	AddressDAO addrDao;
+	
 	@Override
 	public void insertAddress(AddressVO vo) {
-		sqlSession.insert("address.insertAddr", vo);
+		addrDao.insertAddress(vo);
 
 	}
 
 	@Override
 	public void deleteAddress(int addno) {
-		sqlSession.delete("address.deleteAddre", addno);
+		// TODO Auto-generated method stub
 
 	}
 
@@ -36,7 +36,7 @@ public class AddressDAOImpl implements AddressDAO {
 	@Override
 	public List<AddressVO> selectAddress(String userid) {
 		
-		return sqlSession.selectList("address.selectAddr", userid);
+		return addrDao.selectAddress(userid);
 	}
 
 }
