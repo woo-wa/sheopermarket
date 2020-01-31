@@ -16,9 +16,6 @@
 	<http auto-config="true" use-expressions="true"
 		create-session="never">
 		
-		<!-- <headers>
-			<frame-options policy="SAMEORIGIN" />iframe 안되는걸 방지
-		</headers> -->
 
 		<!-- 관리자 영역 설정 -->
 		<intercept-url pattern="/admin/**"	access="hasRole('ROLE_ADMIN')" />

@@ -29,8 +29,13 @@ public class AddressDAOImpl implements AddressDAO {
 
 	@Override
 	public void updateAddress(AddressVO vo) {
-		// TODO Auto-generated method stub
-
+		try {
+			sqlSession.update("address.defSetup", vo);
+			sqlSession.update("address.updateAddr", vo);
+		}catch(Exception e) {
+			System.out.println(e);
+		}
+		
 	}
 
 	@Override

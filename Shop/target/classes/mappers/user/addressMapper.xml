@@ -19,6 +19,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where userid=#{userid}
 	</select>
 	
+	<update id="defSetup">
+		update shop_address set
+			def = 0
+		where userid = #{userid}
+		  and def = 1
+	</update>
+	
+	<!-- 주소 수정 -->
+	<update id="updateAddr">
+		update shop_address set
+			recipient = #{recipient},
+			code = #{code},
+			addr1 = #{addr1},
+			addr2 = #{addr2},
+			phone = #{phone},
+			memo = #{memo},
+			def = #{def}
+		where addno = #{addno}
+	</update>
+	
+	
+	<!-- 주소 삭제 -->
 	<delete id="deleteAddre">
 		delete from shop_address
 		where addno = #{addno}

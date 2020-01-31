@@ -25,6 +25,7 @@ public class PostController {
 		return "post/post.page";
 	}
 	
+	// 배송지 리스트
 	@ResponseBody
 	@RequestMapping(value = "listAddress.do", method = RequestMethod.GET)
 	public List<AddressVO> listAddress(Principal p) {
@@ -42,6 +43,22 @@ public class PostController {
 		
 		return "";
 	}
-	
+	// 배송지 수정
+	@RequestMapping(value = "updateAddress.do", method = RequestMethod.POST)
+	@ResponseBody
+	public String updateAddress(AddressVO vo) {
+		System.out.println("Address = " + vo);
+		addrService.updateAddress(vo);
+		return "succ";
+	}
+	// 배송지 삭제
+	@ RequestMapping(value = "deleteAddress.do", method = RequestMethod.POST)
+	@ResponseBody
+	public String deleteAddress(int addno) {
+		
+		addrService.deleteAddress(addno);
+		
+		return "succ";
+	}
 	
 }

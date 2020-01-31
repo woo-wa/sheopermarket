@@ -76,14 +76,17 @@ function Logout(){
 					<div class="col-6 col-md-4 order-3 order-md-3 text-right">
 						<div class="site-top-icons">
 							<ul>
+								<sec:authorize access="hasRole('ROLE_ADMIN')">
+									<a href="${pageContext.request.contextPath}/admin/main.do">관리자 페이지</a>
+								</sec:authorize>
 								<li><sec:authorize access="isAuthenticated()">
 										<sec:authentication property="principal.username"
 											var="user_id" />
-										<div id="user_id">안녕하세요. ${user_id}</div>
+										<div id="user_id">${user_id}</div>
 									</sec:authorize></li>
-								<li><sec:authorize access="isAuthenticated()">
-										<a href="${pageContext.request.contextPath}/user/mypage.do">마이페이지</a>
-									</sec:authorize></li>
+								<sec:authorize access="isAuthenticated()">
+										<li><a href="${pageContext.request.contextPath}/user/mypage.do">마이페이지</a></li>
+									</sec:authorize>
 								<li><sec:authorize access="isAnonymous()">
 										<a href="${pageContext.request.contextPath}/user/login.do"><span
 											class="icon icon-person"></span></a>

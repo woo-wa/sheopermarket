@@ -23,13 +23,13 @@ public class AddressServiceImpl implements AddressService {
 
 	@Override
 	public void deleteAddress(int addno) {
-		// TODO Auto-generated method stub
+		addrDao.deleteAddress(addno);
 
 	}
 
 	@Override
 	public void updateAddress(AddressVO vo) {
-		// TODO Auto-generated method stub
+		addrDao.updateAddress(vo);
 
 	}
 
