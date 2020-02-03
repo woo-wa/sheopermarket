@@ -56,8 +56,7 @@
 			enctype : 'multipart/form-data',
 			processData : false,
 			success : function(url) {
-				$("#description").summernote('editor.insertImage', url);
-				$('#imageBoard > ul').append('<li><img src="'+url+'" width="480" height="auto"/></li>');
+				$("#description").summernote('editor.insertImage', "${pageContext.request.contextPath}/profileUpload/admin/"+url);
 			}
 		});
 	}
@@ -70,6 +69,7 @@
 	<form name="form1" id="form1" method="post"
 		action="${pageContext.request.contextPath}/admin/insertProduct.do"
 		enctype="multipart/form-data">
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 
 		<table>
 			<tr>

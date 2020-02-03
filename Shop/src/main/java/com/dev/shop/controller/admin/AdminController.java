@@ -1,11 +1,7 @@
 package com.dev.shop.controller.admin;
 
 import java.io.File;
-import java.io.PrintWriter;
 import java.util.UUID;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,32 +29,32 @@ public class AdminController {
 	}
 	// 상품 등록
 	@RequestMapping(value = "insertProduct.do", method = RequestMethod.POST)
-	public String insertProduct(ProductVO vo) {
-		String filename="-";
-		if(!vo.getFile1().isEmpty()) {
-			filename = vo.getFile1().getOriginalFilename();
-			String path = "D:\\dev\\workspace_spring\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\shop\\resources\\images\\";
-			//D:\dev\workspace_spring\spring02\src\main\webapp\WEB-INF\views\images
-			try {
-				new File(path).mkdir();
-				vo.getFile1().transferTo(new File(path+filename));
-			}catch(Exception e) {
-				e.printStackTrace();
-			}
-		}
-		vo.setPicture_url(filename);
+	public void insertProduct(ProductVO vo) {
+		System.out.println("상품 정보 : " + vo);
+		
+		  String filename="-"; 
+		  if(!vo.getFile1().isEmpty()) { 
+			  filename = vo.getFile1().getOriginalFilename(); 
+			  String path = "D:\\dev\\workspace_spring\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\shop\\resources\\images\\";
+
+			  try {
+				  new File(path).mkdir(); vo.getFile1().transferTo(new File(path+filename));
+			  }catch(Exception e) { 
+				  e.printStackTrace(); 
+			  } 
+		  } vo.setPicture_url(filename);
+		 
 		/* productService.insertProduct(vo); */
 
-		return "admin/main";
+		/* return "admin/main"; */
 	}
 	
-	@RequestMapping(value = "imageUpload.do", method = RequestMethod.POST)
+	@RequestMapping(value = "imageUpload.do", method = RequestMethod.POST, produces="text/plain;charset=utf-8")
 	@ResponseBody
-	public String imageUpload(MultipartFile file, HttpServletRequest req, HttpServletResponse res) throws Exception {
+	public String imageUpload(MultipartFile file) throws Exception {
 	
-		PrintWriter out = res.getWriter();
 		// 업로드할 폴더 경로
-		String realFolder = req.getSession().getServletContext().getRealPath("profileUpload");
+		String realFolder = "D:\\dev\\workspace_spring\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\shop\\profileUpload";
 		UUID uuid = UUID.randomUUID();
 
 		// 업로드할 파일 이름
@@ -76,9 +72,8 @@ public class AdminController {
 			f.mkdirs();
 		}
 		file.transferTo(f);
-		out.println("profileUpload/"+ str_filename);
-		out.close();
 		
-		return filepath;
+		
+		return str_filename;
 	}
 }
