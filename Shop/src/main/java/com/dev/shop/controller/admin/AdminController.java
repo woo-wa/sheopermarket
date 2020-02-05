@@ -3,6 +3,8 @@ package com.dev.shop.controller.admin;
 import java.io.File;
 import java.util.UUID;
 
+import javax.inject.Inject;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -10,11 +12,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.dev.shop.model.product.vo.ProductVO;
+import com.dev.shop.service.product.ProductService;
 
 @Controller
 @RequestMapping("/admin/*")
 public class AdminController {
 
+	@Inject
+	ProductService productService;
+	
+	String path = "D:\\dev\\workspace_spring\\.metadata\\.plugins\\org.eclipse.wst.server.core\\"
+			+ "tmp0\\wtpwebapps\\shop\\resources\\images\\";
 	
 	// 관리자 페이지로 이동
 	@RequestMapping(value = "main.do")
@@ -29,24 +37,25 @@ public class AdminController {
 	}
 	// 상품 등록
 	@RequestMapping(value = "insertProduct.do", method = RequestMethod.POST)
-	public void insertProduct(ProductVO vo) {
+	public String insertProduct(ProductVO vo) {
 		System.out.println("상품 정보 : " + vo);
+		String filename="-";
 		
-		  String filename="-"; 
 		  if(!vo.getFile1().isEmpty()) { 
-			  filename = vo.getFile1().getOriginalFilename(); 
-			  String path = "D:\\dev\\workspace_spring\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\shop\\resources\\images\\";
-
+			  UUID uuid = UUID.randomUUID();
+			  filename = uuid.toString() + "_" + vo.getFile1().getOriginalFilename() ; 
+			  String path = this.path + "title\\";
 			  try {
-				  new File(path).mkdir(); vo.getFile1().transferTo(new File(path+filename));
+				  new File(path).mkdir(); 
+				  vo.getFile1().transferTo(new File(path+filename));
 			  }catch(Exception e) { 
 				  e.printStackTrace(); 
 			  } 
 		  } vo.setPicture_url(filename);
 		 
-		/* productService.insertProduct(vo); */
+		productService.insertProduct(vo);
 
-		/* return "admin/main"; */
+		return "admin/main";
 	}
 	
 	@RequestMapping(value = "imageUpload.do", method = RequestMethod.POST, produces="text/plain;charset=utf-8")
@@ -54,7 +63,7 @@ public class AdminController {
 	public String imageUpload(MultipartFile file) throws Exception {
 	
 		// 업로드할 폴더 경로
-		String realFolder = "D:\\dev\\workspace_spring\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\shop\\profileUpload";
+		
 		UUID uuid = UUID.randomUUID();
 
 		// 업로드할 파일 이름
@@ -64,7 +73,7 @@ public class AdminController {
 		System.out.println("원본 파일명 : " + org_filename);
 		System.out.println("저장할 파일명 : " + str_filename);
 
-		String filepath = realFolder + "\\" + "admin" + "\\" + str_filename;
+		String filepath = path + "description\\" + str_filename;
 		System.out.println("파일경로 : " + filepath);
 
 		File f = new File(filepath);
@@ -73,7 +82,6 @@ public class AdminController {
 		}
 		file.transferTo(f);
 		
-		
-		return str_filename;
+		return ""+str_filename;
 	}
 }

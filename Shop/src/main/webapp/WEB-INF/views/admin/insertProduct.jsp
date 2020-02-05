@@ -56,7 +56,7 @@
 			enctype : 'multipart/form-data',
 			processData : false,
 			success : function(url) {
-				$("#description").summernote('editor.insertImage', "${pageContext.request.contextPath}/profileUpload/admin/"+url);
+				$("#description").summernote('editor.insertImage', "${pageContext.request.contextPath}/resources/images/description/"+url);
 			}
 		});
 	}

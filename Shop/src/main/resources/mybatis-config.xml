@@ -7,6 +7,7 @@
 	<typeAliases>
 		<typeAlias type="com.dev.shop.model.user.dto.UserVO" alias="UserVO" />
 		<typeAlias type="com.dev.shop.model.address.vo.AddressVO" alias="AddressVO" />
+		<typeAlias type="com.dev.shop.model.product.vo.ProductVO" alias="ProductVO" />
 	</typeAliases>
 	
 </configuration>

@@ -17,14 +17,20 @@ public class ProductDAOImpl implements ProductDAO {
 	
 	@Override
 	public List<ProductVO> listProduct(int category) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return sqlSession.selectList("product.listProduct");
+	}
+	
+	@Override
+	public ProductVO detailProduct(int product_id) {
+
+		return sqlSession.selectOne("product.detailProduct", product_id);
 	}
 
 	@Override
-	public String insertProduct(ProductVO vo) {
-		// TODO Auto-generated method stub
-		return null;
+	public void insertProduct(ProductVO vo) {
+		sqlSession.insert("product.insertProduct", vo);
+
 	}
 
 	@Override
@@ -38,5 +44,7 @@ public class ProductDAOImpl implements ProductDAO {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	
 
 }

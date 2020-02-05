@@ -5,12 +5,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <!-- 다른 mapper와 중복되지 않도록 네임스페이스 기재 -->
 <mapper namespace="product">
+
+	<!-- 리스트 불러오기 -->
+	<select id="listProduct" resultType="ProductVO">
+		select product_id, product_name, price, picture_url, brand
+		from shop_product
+	</select>
 	
+	<!-- 상품 디테일 -->
+	<select id="detailProduct" resultType="productVO">
+		select * 
+		from shop_product
+		where product_id = #{product_id} 
+	</select>
 	
 	<!-- 상품 등록 -->
 	<insert id="insertProduct">
 		insert into shop_product
-		value((select nvl(max(bno)+1,1)from shop_product), 
+		values((select nvl(max(product_id)+1,1)from shop_product), 
 				#{category}, #{product_name}, #{price}, 
 				#{description}, #{picture_url}, #{brand})
 	</insert>

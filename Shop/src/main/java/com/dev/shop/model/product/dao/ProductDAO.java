@@ -8,8 +8,10 @@ public interface ProductDAO {
 
 	//리스트
 	public List<ProductVO> listProduct(int category);
+	//디테일
+	public ProductVO detailProduct(int product_id);
 	//입력
-	public String insertProduct(ProductVO vo);
+	public void insertProduct(ProductVO vo);
 	//삭제
 	public String deleteProduct(int product_id);
 	//수정
